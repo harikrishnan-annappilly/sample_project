@@ -4,20 +4,23 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Document</title>
 </head>
 <body>
-    <form action="login.php">
+    <form>
+        <h2>Login page</h2>
         <input type="text" name="input_username" placeholder="Username">
         <input type="password" name="input_password" placeholder="Password">
-        <button type="submit" name="submit">Register</button>
+        <button type="submit" name="login_button">Login</button>
     </form>
-    <!-- Here we create sql connection and input the values we enter -->
     <?php
-    if(isset($_GET['submit'])){
-        $username = $_GET['input_username'];
-        $password = $_GET['input_password'];
+    if(isset($_GET['login_button'])){
         
+    }
+    ?>
+
+    <?php
+    if(isset($_GET['login_button'])){
         $mysql_servername = "localhost";
         $mysql_username = "root";
         $mysql_password = "";
@@ -27,16 +30,31 @@
         $conn = mysqli_connect($mysql_servername, $mysql_username, $mysql_password, $mysql_dbname);
         // Check connection
         if (!$conn) {
-            die("Connection failed: " . mysqli_connect_error());
+        die("Connection failed: " . mysqli_connect_error());
         }
-        $sql = "INSERT INTO tbluser (username, password)
-        VALUES ('".$username."', '".$password."')";
 
-        if (mysqli_query($conn, $sql)) {
-            $message = "New record created successfully";
-            header('Location: http://localhost/sample_project/login.php?message='.$message.'');
+        $username = $_GET['input_username'];
+        $password = $_GET['input_password'];
+        $sql = "SELECT id, username, password FROM tbluser where username='".$username."'";
+        
+        $result = mysqli_query($conn, $sql);
+        if (mysqli_num_rows($result) == 1) {
+        // output data of each row
+        while($row = mysqli_fetch_assoc($result)) {
+            if($row["password"]==$password){
+                $redirect_link = 'http://localhost/sample_project/home_file.php';
+                header('Location: '.$redirect_link);
+            }
+            else{
+                $message = 'Password incorrect';
+                $redirect_link = 'http://localhost/sample_project/login.php'.'?message='.$message;
+                header('Location: '.$redirect_link);
+            }
+        }
         } else {
-            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+            $message = "No user exists";
+            $redirect_link = 'http://localhost/sample_project/login.php'.'?message='.$message;
+            header('Location: '.$redirect_link);
         }
         mysqli_close($conn);
     }
@@ -47,5 +65,8 @@
         echo $_GET['message'];
     }
     ?>
+    <div>
+        Create user click <a href="register.php">here</a>
+    </div>
 </body>
 </html>

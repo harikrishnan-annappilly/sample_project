@@ -7,6 +7,6 @@
     <title>Home</title>
 </head>
 <body>
-    <h1>User Home</h1>
+    <h1>Welcome User Home</h1>
 </body>
 </html>
