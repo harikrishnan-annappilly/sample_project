@@ -1,0 +1,10 @@
+Create database with following code
+CREATE DATABASE IF NOT EXISTS php_sample;
+
+
+Create table with following code
+CREATE TABLE IF NOT EXISTS tbluser (id INT NOT NULL AUTO_INCREMENT, username VARCHAR(20), password VARCHAR(20), PRIMARY KEY (id));
+
+
+Insert data command
+INSERT INTO tbluser (username, password) values ('admin', 'admin');
